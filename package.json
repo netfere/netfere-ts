@@ -1,0 +1,25 @@
+{
+  "name": "netfere-ts",
+  "version": "0.0.1",
+  "description": "1234 78 oooo 学用git",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netfere/netfere-ts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/netfere/netfere-ts/issues"
+  },
+  "homepage": "https://github.com/netfere/netfere-ts#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "typescript": "^3.7.4"
+  }
+}
