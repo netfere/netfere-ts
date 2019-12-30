@@ -1,0 +1,13 @@
+export declare function is(source: any, eq?: string | string[]): boolean | string;
+export declare function isString(source: any): boolean;
+export declare function isNumber(source: any): boolean;
+export declare function isBoolean(source: any): boolean;
+export declare function isObject(source: any): boolean;
+export declare function isArray(source: any): boolean;
+export declare function isFunction(source: any): boolean;
+export declare function isRegexp(source: any): boolean;
+export declare function isDate(source: any): boolean;
+export declare function isNull(source: any): boolean;
+export declare function isUndefined(source: any): boolean;
+export declare function isNan(source: any): boolean;
+export declare function isVNode(source: any): boolean;
