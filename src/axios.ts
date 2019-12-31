@@ -1,43 +1,38 @@
 import axios from 'axios';
-import { AxiosRequestConfig, AxiosError, AxiosResponse, AxiosInstance, AxiosPromise } from 'axios/index'
+import { AxiosRequestConfig, AxiosError, AxiosResponse, AxiosInstance } from 'axios/index'
 import { apply } from './apply';
-import { has } from './has';
+import { slice } from './slice';
 
 
-interface IAxiosRequestConfig extends AxiosRequestConfig {
-    returnFalseAuto?: boolean;
-    format?: (res: any) => any;
-}
-interface IAxiosResponse extends AxiosResponse {
-    config: IAxiosRequestConfig
-}
-
-const defaultFormat = function (res: any) {
-    if (typeof res === 'object') {
-        if (has(res, 'success')) {
-            return res;
-        } else {
-            return { success: true, data: res };
+export interface ExAxiosRequestConfig extends AxiosRequestConfig {
+    interceptor?: boolean | {
+        request?: {
+            config?: (cfg: AxiosRequestConfig) => AxiosRequestConfig;
+            error?: (err: AxiosError) => Promise<AxiosError>;
+        };
+        response?: {
+            result?: (res: AxiosResponse) => any;
+            error?: (err: AxiosError) => Promise<AxiosError>;
         }
-    } else {
-        return { data: res };
     }
 }
-const DEFAULTS: IAxiosRequestConfig = {
+
+
+
+const DEFAULTS: AxiosRequestConfig = {
     timeout: 30000,
     withCredentials: false,
     method: 'get',
     responseType: 'json',
+    // 'Content-Type': 'application/x-www-form-urlencoded'
     headers: {
-        'Accept': 'application/json',
-        //'Content-Type': 'application/x-www-form-urlencoded'
-        'Content-Type': 'application/json;charset=UTF-8'
-    },
-    returnFalseAuto: true,
-    format: defaultFormat
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json;charset=UTF-8',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
+    }
 }
 //拦截请求配置数据项
-const interRequestConfig = function (config: IAxiosRequestConfig) {
+const interRequestConfig = function (config: AxiosRequestConfig) {
     if (config.method === 'get' && !!config.data) {
         config.method = 'post'
     }
@@ -45,11 +40,11 @@ const interRequestConfig = function (config: IAxiosRequestConfig) {
 }
 //拦截请求错误
 const interRequestError = function (error: AxiosError) {
-    let msg = error ? error.message : '';
-    return { success: false, msg: msg || '未知错误', error }
+    let msg = error ? error.message : '未知错误';
+    return { success: false, msg, error }
 }
 //拦截响应结果数据
-const interResponseResult = function ({ data, config, headers, request, status, statusText }: IAxiosResponse) {
+const interResponseResult = function ({ data, config, headers, request, status, statusText }: AxiosResponse) {
     let message = '';
     try {
         // IE9时response.data是undefined，因此需要使用response.request.responseText(Stringify后的字符串)
@@ -120,35 +115,34 @@ const interResponseError = function (error: AxiosError) {
     return { success: false, msg: msg || '未知错误', error };
 }
 
-class AxiosClass {
-    instance?: AxiosInstance;
-    constructor() {
+export class AxiosClass {
+    instance: AxiosInstance;
+    private defaults: AxiosRequestConfig = {};
+    constructor(defaults?: ExAxiosRequestConfig) {
+        defaults = apply({ interceptor: true }, DEFAULTS, defaults || {});
+        this.defaults = slice(defaults, ['interceptor'], false);
         this.instance = axios.create();
+        if (typeof defaults.interceptor === 'boolean' && defaults.interceptor) {
+            this.setInterceptorsRequest();
+            this.setInterceptorsRespone();
+        } else if (defaults.interceptor) {
+            const { request, response } = defaults.interceptor;
+            this.setInterceptorsRequest(request?.config, request?.error);
+            this.setInterceptorsRespone(response?.result, response?.error);
+        }
     }
-    query(options?: IAxiosRequestConfig): Promise<any> {
+    query(options?: AxiosRequestConfig): Promise<any> {
         // @ts-ignore
         return new Promise((resolve, reject) => {
-            if (this.instance) {
-                const config: IAxiosRequestConfig = apply({}, DEFAULTS, options || {});
-                this.instance(config).then((res) => {
-                    if (config.format) {
-                        resolve(config.format(res))
-                    } else {
-                        resolve(res);
-                    }
-                }).catch((error: AxiosError) => {
-                    reject({ success: false, msg: error.message || '未知错误' })
-                })
-            } else {
-                reject({ success: false, msg: '初始化Axios实例失败' });
-            }
+            const config: AxiosRequestConfig = apply({}, this.defaults, options || {});
+            this.instance(config).then((res) => {
+                resolve(res);
+            }).catch((error) => {
+                reject({ success: false, msg: error.message || '未知错误' })
+            })
         })
     }
-    setInterceptorsRequest(req?: (cfg: IAxiosRequestConfig) => IAxiosRequestConfig, err?: (err: AxiosError) => Promise<AxiosError>) {
-        if (!this.instance) {
-            // @ts-ignore
-            return Promise.reject(new Error("初始化Axios实例失败"));
-        }
+    private setInterceptorsRequest(req?: (cfg: AxiosRequestConfig) => AxiosRequestConfig, err?: (err: AxiosError) => Promise<AxiosError>) {
         this.instance.interceptors.request.use(
             config => {
                 config = interRequestConfig(config);
@@ -156,34 +150,22 @@ class AxiosClass {
             },
             error => {
                 error = interRequestError(error)
-                error = err ? err(error) : error;
-                // @ts-ignore
-                return Promise.reject(error)
+                return err ? err(error) : error;
             }
         );
     }
-    setInterceptorsRespone(res?: (data: IAxiosResponse) => any, err?: (err: AxiosError) => Promise<AxiosError>) {
-        if (!this.instance) {
-            // @ts-ignore
-            return Promise.reject(new Error("初始化Axios实例失败"));
-        }
+    private setInterceptorsRespone(res?: (data: AxiosResponse) => any, err?: (err: AxiosError) => Promise<AxiosError>) {
         this.instance.interceptors.response.use(
-            (response: IAxiosResponse) => {
+            (response: AxiosResponse) => {
                 response = interResponseResult(response);
                 return res ? res(response) : response;
             },
             (error) => {
                 error = interResponseError(error);
-                error = err ? err(error) : error;
-                // @ts-ignore
-                return Promise.reject(error)
+                return err ? err(error) : error;
             }
         );
     }
 }
-export function Axios(options: IAxiosRequestConfig): Promise<any> {
-    const instance = new AxiosClass();
-    instance.setInterceptorsRequest();
-    instance.setInterceptorsRespone();
-    return instance.query(options);
-}
+
+export { AxiosRequestConfig }

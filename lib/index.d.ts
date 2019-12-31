@@ -30,7 +30,6 @@ import { browser, isChrome, isEdge, isFf, isIe, isIe10, isIe11, isIe7, isIe8, is
 import { device, isAndroid, isIpad, isIphone, isMac, isWeixin, isWxwork } from './device';
 import { date } from './date';
 import { vtype } from './vtype';
-import { Axios } from './axios';
 import { res } from './res';
 import { xmlToJson, jsonToXml } from './xmljson';
 import { jwtSet, jwtVaild } from './jwt';
@@ -114,7 +113,6 @@ declare const _default: {
     isWeixin: typeof isWeixin;
     isWxwork: typeof isWxwork;
     vtype: typeof vtype;
-    Axios: typeof Axios;
     res: typeof res;
     xmlToJson: typeof xmlToJson;
     jsonToXml: typeof jsonToXml;
@@ -122,4 +120,3 @@ declare const _default: {
     jwtVaild: typeof jwtVaild;
 };
 export default _default;
-export { is, isString, isNumber, isBoolean, isObject, isArray, isFunction, isRegexp, isDate, isNull, isUndefined, isNan, isVNode, id, has, len, uuid, br2ln, ln2br, clearHtml, money, fileSize, rnd, rndString, rndPwd, rndColor, noop, sleep, parseUrl, isEmpty, notEmpty, trim, to, toFirst, toHump, toLine, toLower, toUpper, replace, split, apply, applyIf, applyNot, clone, copy, map, compare, different, exists, slice, clear, remove, insert, update, getValue, getValueByPath, find, distinct, date, browser, isChrome, isEdge, isFf, isIe, isIe10, isIe11, isIe7, isIe8, isIe9, isOpera, isSafari, device, isAndroid, isIpad, isIphone, isMac, isWeixin, isWxwork, vtype, Axios, res, xmlToJson, jsonToXml, jwtSet, jwtVaild };
