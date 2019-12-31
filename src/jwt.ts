@@ -1,4 +1,4 @@
-
+// @ts-ignore
 import * as jwt from 'jwt-simple';
 import { date } from './date';
 import {isDate} from './is';

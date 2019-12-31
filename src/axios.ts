@@ -1,25 +1,27 @@
+// @ts-ignore
 import axios from 'axios';
-import { AxiosRequestConfig, AxiosError, AxiosResponse, AxiosInstance } from 'axios/index'
+// @ts-ignore
+
 import { apply } from './apply';
 import { slice } from './slice';
-
+/* 
 
 export interface ExAxiosRequestConfig extends AxiosRequestConfig {
     interceptor?: boolean | {
         request?: {
             config?: (cfg: AxiosRequestConfig) => AxiosRequestConfig;
-            error?: (err: AxiosError) => Promise<AxiosError>;
+            error?: (err: any) => Promise<any>;
         };
         response?: {
-            result?: (res: AxiosResponse) => any;
-            error?: (err: AxiosError) => Promise<AxiosError>;
+            result?: (res: any) => any;
+            error?: (err: any) => Promise<any>;
         }
     }
 }
 
+ */
 
-
-const DEFAULTS: AxiosRequestConfig = {
+const DEFAULTS = {
     timeout: 30000,
     withCredentials: false,
     method: 'get',
@@ -32,19 +34,19 @@ const DEFAULTS: AxiosRequestConfig = {
     }
 }
 //拦截请求配置数据项
-const interRequestConfig = function (config: AxiosRequestConfig) {
+const interRequestConfig = function (config: any) {
     if (config.method === 'get' && !!config.data) {
         config.method = 'post'
     }
     return config
 }
 //拦截请求错误
-const interRequestError = function (error: AxiosError) {
+const interRequestError = function (error: any) {
     let msg = error ? error.message : '未知错误';
     return { success: false, msg, error }
 }
 //拦截响应结果数据
-const interResponseResult = function ({ data, config, headers, request, status, statusText }: AxiosResponse) {
+const interResponseResult = function ({ data, config, headers, request, status, statusText }: any) {
     let message = '';
     try {
         // IE9时response.data是undefined，因此需要使用response.request.responseText(Stringify后的字符串)
@@ -65,7 +67,7 @@ const interResponseResult = function ({ data, config, headers, request, status, 
     }
 }
 //拦截响应结果出错
-const interResponseError = function (error: AxiosError) {
+const interResponseError = function (error: any) {
     if (!error) {
         return { success: false, msg: '未获取错误状态', error: new Error('未获取错误状态') }
     }
@@ -116,9 +118,9 @@ const interResponseError = function (error: AxiosError) {
 }
 
 export class AxiosClass {
-    instance: AxiosInstance;
-    private defaults: AxiosRequestConfig = {};
-    constructor(defaults?: ExAxiosRequestConfig) {
+    instance: any;
+    private defaults: any = {};
+    constructor(defaults?: any) {
         defaults = apply({ interceptor: true }, DEFAULTS, defaults || {});
         this.defaults = slice(defaults, ['interceptor'], false);
         this.instance = axios.create();
@@ -131,41 +133,39 @@ export class AxiosClass {
             this.setInterceptorsRespone(response?.result, response?.error);
         }
     }
-    query(options?: AxiosRequestConfig): Promise<any> {
+    query(options?: any): Promise<any> {
         // @ts-ignore
         return new Promise((resolve, reject) => {
-            const config: AxiosRequestConfig = apply({}, this.defaults, options || {});
-            this.instance(config).then((res) => {
+            const config: any = apply({}, this.defaults, options || {});
+            this.instance(config).then((res: any) => {
                 resolve(res);
-            }).catch((error) => {
+            }).catch((error: any) => {
                 reject({ success: false, msg: error.message || '未知错误' })
             })
         })
     }
-    private setInterceptorsRequest(req?: (cfg: AxiosRequestConfig) => AxiosRequestConfig, err?: (err: AxiosError) => Promise<AxiosError>) {
+    private setInterceptorsRequest(req?: (cfg: any) => any, err?: (err: any) => Promise<any>) {
         this.instance.interceptors.request.use(
-            config => {
+            (config: any) => {
                 config = interRequestConfig(config);
                 return req ? req(config) : config;
             },
-            error => {
+            (error: any) => {
                 error = interRequestError(error)
                 return err ? err(error) : error;
             }
         );
     }
-    private setInterceptorsRespone(res?: (data: AxiosResponse) => any, err?: (err: AxiosError) => Promise<AxiosError>) {
+    private setInterceptorsRespone(res?: (data: any) => any, err?: (err: any) => Promise<any>) {
         this.instance.interceptors.response.use(
-            (response: AxiosResponse) => {
+            (response: any) => {
                 response = interResponseResult(response);
                 return res ? res(response) : response;
             },
-            (error) => {
+            (error: any) => {
                 error = interResponseError(error);
                 return err ? err(error) : error;
             }
         );
     }
 }
-
-export { AxiosRequestConfig }

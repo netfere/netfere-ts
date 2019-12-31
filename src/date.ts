@@ -1,7 +1,36 @@
+// @ts-ignore
 import * as fns from 'date-fns';
+// @ts-ignore
 import zh_cn from 'date-fns/locale/zh-CN';
 
-
+type Locale = {
+    formatDistance: (...args: Array<any>) => any
+    formatRelative: (...args: Array<any>) => any
+    localize: {
+        ordinalNumber: (...args: Array<any>) => any
+        era: (...args: Array<any>) => any
+        quarter: (...args: Array<any>) => any
+        month: (...args: Array<any>) => any
+        day: (...args: Array<any>) => any
+        dayPeriod: (...args: Array<any>) => any
+    }
+    formatLong: Object
+    date: (...args: Array<any>) => any
+    time: (...args: Array<any>) => any
+    dateTime: (...args: Array<any>) => any
+    match: {
+        ordinalNumber: (...args: Array<any>) => any
+        era: (...args: Array<any>) => any
+        quarter: (...args: Array<any>) => any
+        month: (...args: Array<any>) => any
+        day: (...args: Array<any>) => any
+        dayPeriod: (...args: Array<any>) => any
+    }
+    options?: {
+        weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+        firstWeekContainsDate?: 1 | 2 | 3 | 4 | 5 | 6 | 7
+    }
+}
 const weekCfg: { locale: Locale, weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6 } = { locale: zh_cn, weekStartsOn: 1 };
 interface IParseOption {
     locale?: Locale | undefined;
@@ -9,6 +38,10 @@ interface IParseOption {
     firstWeekContainsDate?: 1 | 2 | 3 | 4 | 5 | 6 | undefined;
     useAdditionalWeekYearTokens?: boolean | undefined;
     useAdditionalDayOfYearTokens?: boolean | undefined;
+}
+type Interval = {
+    start: Date | number
+    end: Date | number
 }
 
 class FnsDate {

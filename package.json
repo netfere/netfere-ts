@@ -4,7 +4,9 @@
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-node.json",
+    "dev": "tsc -w",
+    "prepare": "npm run build",
     "test": "mocha --reporter spec"
   },
   "repository": {
