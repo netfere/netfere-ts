@@ -2,10 +2,11 @@ import { is } from './is';
 import { has } from './has';
 import { apply } from './apply';
 import { isEmpty } from './isEmpty';
+import { IAnyObject } from '../typings/global';
 
-interface IAnyObject {
-    [x: string]: any
-}
+export function map(source: IAnyObject, fields: string | string[] | Array<{ [prop: string]: string }>, distinct?: string | string[]): IAnyObject
+export function map(source: IAnyObject[], fields: string | string[] | Array<{ [prop: string]: string }>, distinct?: string | string[]): IAnyObject[]
+
 /**
  * 对数据进行字段映射处理
  * @param {Array|Object} source 要处理的数据

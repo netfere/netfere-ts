@@ -8,5 +8,4 @@ node_modules/
 
 .DS_Store
 .npmignore
-lib/
-node/
+dist/

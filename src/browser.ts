@@ -23,6 +23,7 @@ export function browser(type?: BType | BType[], userAgent?: string): boolean | s
     if (typeof window === 'undefined' && !userAgent) {
         return type ? false : 'unkown'
     }
+    
     if (!userAgent) {
         userAgent = navigator.userAgent
     }

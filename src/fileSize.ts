@@ -1,3 +1,4 @@
+/**将文件大小转换为文本表示 */
 export function fileSize(value: number): string {
     const k = 1024, m = 1024 * k, g = 1024 * m;
     if (value > g) {

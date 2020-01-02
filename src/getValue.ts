@@ -1,15 +1,12 @@
-interface IGetValueResult {
-    owner: any;
-    value: any;
-    prop: any;
-}
+import { IGetValueResult, IAnyObject } from "../typings/global";
+
 /**
  * 在object中通过prop查找值。如：{info:{name,sex}}时，可通过info.name查值
  * @param {Object} object 
  * @param {String} prop 用.表示的值键
  * @returns {*}
  */
-export function getValue(object: { [x: string]: any }, prop: string): IGetValueResult {
+export function getValue(object: IAnyObject, prop: string): IGetValueResult {
     prop = prop || '';
     const paths = prop.split('.');
     let current = object;
@@ -36,7 +33,7 @@ export function getValue(object: { [x: string]: any }, prop: string): IGetValueR
     return { owner: current, value: result, prop: lastProp };
 }
 
-export function getValueByPath(object: { [x: string]: any }, prop: string): IGetValueResult {
+export function getValueByPath(object: IAnyObject, prop: string): IGetValueResult {
     console.debug('getValueByPath 已过期，请使用 getValue');
     return getValue(object, prop);
 }

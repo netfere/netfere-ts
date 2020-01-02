@@ -1,6 +1,7 @@
 import { is } from './is';
 import { insert } from './insert';
 import { apply } from './apply';
+
 /**
  * 在源数据中更新数据
  * @param {Array} source
@@ -9,8 +10,8 @@ import { apply } from './apply';
  * 
  * @param {*} value 详见source中的相关说明
  * @param {*} query 详见source中的相关说明
- * @param {Boolean} rep 找到记录时处理的方式
- * @param {Boolean} before 找不到记录时添到头部或尾部
+ * @param {Boolean} rep 找到记录时处理的方式 true则替换，false则新增(默认)
+ * @param {Boolean} before 找不到记录时添到头部或尾部 true则添加头部 false则添加末尾(默认)
  * @returns {Array|Object|String} 与source类型一致
  */
 export function update(source: any[], value: any, query: any, rep?:boolean, before?:boolean): any[] {

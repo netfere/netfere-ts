@@ -1,6 +1,5 @@
-// @ts-ignore
 import * as fns from 'date-fns';
-// @ts-ignore
+
 import zh_cn from 'date-fns/locale/zh-CN';
 
 type Locale = {

@@ -1,15 +1,33 @@
 import { isString, isRegexp, isObject, isArray } from './is';
 import { getValue } from './getValue';
-/**
- * 在源数据中找数据
- * @param {Array|Object|String} source 类型为Array,Object,String:
- * 1)source=Array时，query是一个查询方法。
- * 2)source=Object时，query是一个键名，且允许使用.分隔的键名路径
- * 3)source=String时，query可以为String或Regexp，查找到的数据将以String[]返回
- * @param {*} query 详见source中的相关说明
- * @param {*} state 仅当source=Array时有效，true时返回数据和下标 false时只返回下标，不设置仅返回数据
- * @returns {*} 
- */
+import { IAnyObject } from '../typings/global';
+
+/**通过query方法在source中查找，满足即返回数据项目 */
+export function find(
+    source: any[],
+    query: (item: any, index: number) => boolean
+): any;
+/**通过query方法在source中查找，满足即返回数据项目和下标 */
+export function find(
+    source: any[],
+    query: (item: any, index: number) => boolean,
+    state: true
+): {index:number,data:any};
+/**通过query方法在source中查找，满足即返回下标 */
+export function find(
+    source: any[],
+    query: (item: any, index: number) => boolean,
+    state: false
+): number;
+
+/**query为键名或键路径查找数据 */
+export function find(
+    source: IAnyObject, 
+    /**键名 或 以.分隔的路径 */
+    query: string
+): any;
+export function find(source: string, query: string | RegExp): string[];
+
 export function find(source: any, query: any, state?: boolean): any {
     if (isString(source)) {
         return (isRegexp(query) ? source.match(query) : isString(query) ? source.match(new RegExp(query, 'g')) : []) || []

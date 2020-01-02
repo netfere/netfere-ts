@@ -1,4 +1,3 @@
-import { is, isString, isNumber, isBoolean, isObject, isArray, isFunction, isRegexp, isDate, isNull, isUndefined, isNan, isVNode } from './is';
 import { id } from './id';
 import { has } from './has';
 import { len } from './len';
@@ -32,14 +31,21 @@ import { date } from './date';
 import { vtype } from './vtype';
 import { res } from './res';
 import { xmlToJson, jsonToXml } from './xmljson';
-import { jwtSet, jwtVaild } from './jwt';
+import {
+  is, isString, isNumber, isBoolean, isObject, isArray, isFunction,
+  isRegexp, isDate, isNull, isUndefined, isNan, isVNode, isPromise
+} from './is';
+import { AxiosClass, AxiosRequestConfig, AxiosResponse } from './axios';
 export default {
-  is, isString, isNumber, isBoolean, isObject, isArray, isFunction, isRegexp, isDate, isNull, isUndefined, isNan, isVNode,
+  is, isString, isNumber, isBoolean, isObject, isArray, isFunction, isRegexp, isDate, isNull, isUndefined, isNan, isVNode, isPromise,
   id, has, len, uuid, br2ln, ln2br, clearHtml, money, fileSize, rnd, rndString, rndPwd, rndColor,
   noop, sleep, parseUrl, isEmpty, notEmpty, trim, to, toFirst, toHump, toLine, toLower, toUpper, replace,
   split, apply, applyIf, applyNot, clone, copy, map, compare, different, exists, slice, clear, remove, insert, update,
   getValue, getValueByPath, find, distinct, date,
   browser, isChrome, isEdge, isFf, isIe, isIe10, isIe11, isIe7, isIe8, isIe9, isOpera, isSafari,
   device, isAndroid, isIpad, isIphone, isMac, isWeixin, isWxwork,
-  vtype, res, xmlToJson, jsonToXml, jwtSet, jwtVaild
+  vtype, res, xmlToJson, jsonToXml
+}
+export {
+  AxiosClass, AxiosRequestConfig, AxiosResponse
 }

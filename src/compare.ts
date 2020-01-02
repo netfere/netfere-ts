@@ -1,4 +1,5 @@
 import { is } from './is';
+import { IAnyObject } from '../typings/global';
 
 function compareArray(a: any, b: any) {
     if (a.length !== b.length) {
@@ -48,7 +49,11 @@ function compareObject(obj1: { [x: string]: any }, obj2: { [x: string]: any }): 
         return compare(a[key], b[key])
     });
 }
-
+/**
+ * 判断两个数据是否完全一致
+ * @param a 
+ * @param b 
+ */
 export function compare(a: any, b: any) {
     if (a === b) {
         return true;
@@ -64,9 +69,13 @@ export function compare(a: any, b: any) {
     }
     return false
 }
-
-export function different(target: { [x: string]: any }, source: { [x: string]: any }) {
-    let value: { [x: string]: any } = {}
+/**
+ * 返回target中与source中不一致的数据
+ * @param target 
+ * @param source 
+ */
+export function different(target: IAnyObject, source: IAnyObject) {
+    let value: IAnyObject = {}
     for (let key in target) {
         if (!compare(target[key], source[key])) {
             value[key] = target[key]

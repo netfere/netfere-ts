@@ -2,6 +2,26 @@ import { is, isString, isObject, isArray, isFunction } from './is';
 import { compare } from './compare';
 import { notEmpty } from './isEmpty';
 import { has } from './has';
+import { IAnyObject } from '../typings/global';
+
+/**从数组中删除数据，返回被删除记录 */
+export function remove(
+    source: any[], 
+    /** 提供一个查询方法，执行后将从source中删除满足query返回为true的数据 */
+    callbackfn: (value: string, index: number, array: any[]) => boolean
+): any[]
+
+/**从数组中删除数据，返回被删除记录 */
+export function remove(
+    source: any[], 
+    /**从source中删除与之一致的记录 */
+    query: any | any[]
+): any[]
+
+/**从object删除query指定的键名，返回被删除记录 */
+export function remove(source: IAnyObject, query: string | string[]): IAnyObject
+/**根据query内容将source中相应内容替换为空,返回替换后的字符串 */
+export function remove(source: string, query: string | RegExp): string
 /**
  * 从源数据中删除指定数据
  * @param {*} source 从此数据中删除，允许Array,Object,String。

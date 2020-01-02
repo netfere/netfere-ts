@@ -1,4 +1,9 @@
 import { has } from './has';
+/**判断数据类型，返回小写文本 */
+export function is(source: any): string;
+/**判断数据是为指定类型，或指定类型之一 */
+export function is(source: any, eq: string | string[]): boolean;
+
 export function is(source: any, eq?: string | string[]): boolean | string {
     const whatTheType = (something: any) => {
         const t = Object.prototype.toString.call(something).replace(/^\[object |]$/gi, '');
@@ -36,7 +41,7 @@ export function isArray(source: any): boolean {
 }
 
 export function isFunction(source: any): boolean {
-    return is(source, 'function') as boolean;
+    return is(source, ['function','promise']) as boolean;
 }
 
 export function isRegexp(source: any): boolean {
@@ -61,4 +66,8 @@ export function isNan(source: any): boolean {
 
 export function isVNode(source: any): boolean {
     return is(source, 'vnode') as boolean;
+}
+
+export function isPromise(source: any): boolean {
+    return is(source, 'promise') as boolean;
 }

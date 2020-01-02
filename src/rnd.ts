@@ -1,5 +1,6 @@
 import { is } from './is';
 import { len } from './len';
+/**随机生成两值范围内的数字，包含上下限 */
 export function rnd(start: number, end: number): number {
     if (arguments.length === 2) {
         return Math.round(start + Math.random() * (end - start));
@@ -9,7 +10,13 @@ export function rnd(start: number, end: number): number {
         return Math.round(Math.random() * 255)
     }
 }
-
+/**随机生成指字长度的字符串 */
+export function rndString(
+    /**默认8位 */
+    length?:number,
+    /**为string时，自行指定允许的字符 为string[]时，允许取值['0','a','A','S'] 0为所有数字 a为所有小写字母 A为所有大写字母 S为特殊字符 */
+    char?:string | string[]
+):string;
 export function rndString(length?: number, char?: string | string[]): string {
     length = length || 8;
     char = char || ['0', 'a'];
@@ -42,11 +49,11 @@ export function rndString(length?: number, char?: string | string[]): string {
     }
     return res;
 }
-
+/**随机生成密码，功能同rndString，其中length=8,char=['0'] */
 export function rndPwd(length?: number, char?: string | string[]): string {
     return rndString(length || 8, char || ['0']);
 }
-
+/**随机生成颜色值,默认带#前缀 pix=false时不带# */
 export function rndColor(pix: boolean = true) {
     return (pix ? '#' : '') + Math.random().toString(16).substring(2).substr(0, 6);
 }

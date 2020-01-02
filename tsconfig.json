@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-    "target": "es2015", // 指定ECMAScript目标版本
-    "module": "es2015", // 指定模块化类型
+    "target": "ES5", // 指定ECMAScript目标版本
+    "module": "CommonJS", // 指定模块化类型
+    "moduleResolution": "Node",
     "declaration": true, // 生成 `.d.ts` 文件
     "outDir": "./lib", // 编译后生成的文件目录
-    "strict": true // 开启严格的类型检测
+    "rootDir": "./src",
+    "strict": true, // 开启严格的类型检测
+    "lib": [
+      "ES6",
+      "DOM"
+    ]
   },
-  "exclude": [
-    "node_modules"
-  ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts","typings"
+  ],
+  "exclude": [
+    "node_modules/**"
   ]
 }

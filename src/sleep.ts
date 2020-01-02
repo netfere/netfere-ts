@@ -10,7 +10,6 @@ export function sleep(time: number, callback: () => void): void | Promise<any> {
     if (typeof callback === 'function') {
         setTimeout(callback, time);
     } else {
-        // @ts-ignore
         return new Promise((resolve) => {
             setTimeout(resolve, time);
         })

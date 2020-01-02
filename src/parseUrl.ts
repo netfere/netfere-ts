@@ -1,15 +1,22 @@
 import { isArray } from './is';
 import { has } from './has';
-export function parseUrl(url: string, forceNumber: boolean = true): { [x: string]: any } {
+import { IAnyObject } from '../typings/global';
+
+/**传入url以解析?后的参数 forceNumber=true时，将文本数字转换为数值[默认为true]*/
+export function parseUrl(url: string, forceNumber?: boolean): IAnyObject;
+/**解析当前浏览器地址中的参数 forceNumber=true时，将文本数字转换为数值[默认为true] */
+export function parseUrl(forceNumber?: boolean): IAnyObject;
+
+export function parseUrl(url?: any, forceNumber?: any): IAnyObject {
     if (typeof url === 'boolean') {
         forceNumber = url;
         url = '';
     }
-    const result: { [x: string]: any } = {};
+    const result: IAnyObject = {};
     url = url || (window ? location.href : '');
     //如果参数不是对象。返回空对象
     if (typeof url !== 'string') { return result }
-
+    forceNumber = forceNumber === false ? false : true;
     //处理数字'100'=>100
     const force = function (value: string): number | string {
         if (forceNumber && typeof value === 'string' && isNaN(Number(value)) === false) {
